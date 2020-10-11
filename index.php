@@ -20,6 +20,33 @@
         maxlength="32" size="48" required autofocus>
       <br><br>
       <input type="reset" value="clear field">
+      <input type="submit" value="submit">
     </form>
+
+    <?php
+      if( isset($_GET["md5hash"]) ) {
+        if( preg_match("/[0-9a-f]{32}/", $_GET["md5hash"]) ) {
+          $pinHash = $_GET["md5hash"];
+
+          for( $i=0; $i<10; $i++ ) $digits[] = (string)$i;
+
+          $found = false;
+
+          foreach( $digits as $val )
+            if( $pinHash===md5($val) ) {
+              $result = "Pin is $val.\n";
+              $found = true;
+              break;
+            }
+
+          if(!$found) $result = "Pin not found.\n";
+        }
+        else # HTML form filter did not work (faulty browser?).
+          $result = 'Error: An invalid MD5 hash was entered.';
+
+        echo "<h3>Result</h3>";
+        echo "<p>" . $result . "</p>";
+      }
+    ?>
   </body>
 </html>
