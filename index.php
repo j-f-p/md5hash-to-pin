@@ -46,6 +46,9 @@
 
         echo "<h3>Result</h3>";
         echo "<p>" . $result . "</p>";
+        echo "<form action=\"/w7hw/0index.php\">";
+        echo "  <input type=\"submit\" value=\"clear result\">";
+        echo "</form>";
       }
     ?>
   </body>
