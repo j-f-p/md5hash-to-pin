@@ -20,11 +20,14 @@
         maxlength="32" size="48" required autofocus>
       <br><br>
       <input type="reset" value="clear field">
-      <input type="submit" value="submit">
+      <input type="submit" name="process" value="submit">
     </form>
 
     <?php
-      if( isset($_GET["md5hash"]) ) {
+      if( isset($_GET["clear"]) ) {
+        unset($_GET["process"]);
+      }
+      else if( isset($_GET["process"]) ) {
         if( preg_match("/[0-9a-f]{32}/", $_GET["md5hash"]) ) {
           $pinHash = $_GET["md5hash"];
 
@@ -46,8 +49,8 @@
 
         echo "<h3>Result</h3>";
         echo "<p>" . $result . "</p>";
-        echo "<form action=\"/w7hw/0index.php\">";
-        echo "  <input type=\"submit\" value=\"clear result\">";
+        echo "<form>";
+        echo "  <input type=\"submit\" name=\"clear\" value=\"clear result\">";
         echo "</form>";
       }
     ?>
