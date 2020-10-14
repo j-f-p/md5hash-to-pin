@@ -8,9 +8,10 @@
     <h1>MD5 Hash Inverter</h1>
 
     <h2>About</h2>
-    <p>This web document provides a tool to invert an MD5 hash of a string
-    consisting of a one-digit integer. The inverter employs a brute-force
-    search to determine the string associated with the MD5 hash.</p>
+    <p>This web document provides a tool to invert an MD5 hash of a
+    four-character string consisting of decimal digits, that is, a 4-digit PIN.
+    The inverter employs a brute-force search to determine the PIN associated
+    with the MD5 hash.</p>
 
     <h2>Inverter</h2>
     <form>
@@ -31,18 +32,21 @@
         if( preg_match("/[0-9a-f]{32}/", $_GET["md5hash"]) ) {
           $pinHash = $_GET["md5hash"];
 
-          for( $i=0; $i<10; $i++ ) $digits[] = (string)$i;
+          for( $i=0; $i<10; $i++ ) $digits[] = "000" . (string)$i;
+          for( $i=10; $i<100; $i++ ) $digits[] = "00" . (string)$i;
+          for( $i=100; $i<1000; $i++ ) $digits[] = "0" . (string)$i;
+          for( $i=1000; $i<10000; $i++ ) $digits[] = (string)$i;
 
           $found = false;
 
           foreach( $digits as $val )
             if( $pinHash===md5($val) ) {
-              $result = "Pin is $val.\n";
+              $result = "PIN is $val.\n";
               $found = true;
               break;
             }
 
-          if(!$found) $result = "Pin not found.\n";
+          if(!$found) $result = "PIN was not found.\n";
         }
         else # HTML form filter did not work (faulty browser?).
           $result = 'Error: An invalid MD5 hash was entered.';
