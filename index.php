@@ -25,9 +25,8 @@
     </form>
 
     <?php
-      if( isset($_GET["clear"]) ) {
+      if( isset($_GET["clear"]) )
         unset($_GET["process"]);
-      }
       else if( isset($_GET["process"]) ) {
         if( preg_match("/[0-9a-f]{32}/", $_GET["md5hash"]) ) {
           $pinHash = $_GET["md5hash"];
@@ -41,15 +40,15 @@
 
           foreach( $digits as $val )
             if( $pinHash===md5($val) ) {
-              $result = "PIN is $val.\n";
+              $result = "PIN is $val.";
               $found = true;
               break;
             }
 
-          if(!$found) $result = "PIN was not found.\n";
+          if(!$found) $result = "PIN was not found.";
         }
         else # HTML form filter did not work (faulty browser?).
-          $result = 'Error: An invalid MD5 hash was entered.';
+          $result = "Error: An invalid MD5 hash was entered.";
 
         echo "<h3>Result</h3>";
         echo "<p>" . $result . "</p>";
