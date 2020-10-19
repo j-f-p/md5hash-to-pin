@@ -29,23 +29,40 @@
         unset($_GET["process"]);
       else if( isset($_GET["process"]) ) {
         if( preg_match("/[0-9a-f]{32}/", $_GET["md5hash"]) ) {
-          $pinHash = $_GET["md5hash"];
-
-          for( $i=0; $i<10; $i++ ) $digits[] = "000" . (string)$i;
-          for( $i=10; $i<100; $i++ ) $digits[] = "00" . (string)$i;
-          for( $i=100; $i<1000; $i++ ) $digits[] = "0" . (string)$i;
-          for( $i=1000; $i<10000; $i++ ) $digits[] = (string)$i;
-
+          define("pinHash", $_GET["md5hash"]); # invariant: pinHash is constant
           $found = false;
 
-          foreach( $digits as $val )
-            if( $pinHash===md5($val) ) {
-              $result = "PIN is $val.";
+          for( $i=0; $i<10; $i++ )
+            if( pinHash===md5("000" . $i) ) {
+              $result = "PIN is 000$i";
               $found = true;
               break;
             }
-
-          if(!$found) $result = "PIN was not found.";
+          if(!$found) {
+            for( $i=10; $i<100; $i++ )
+              if( pinHash===md5("00" . $i) ) {
+                $result = "PIN is 00$i.";
+                $found = true;
+                break;
+              }
+            if(!$found) {
+              for( $i=100; $i<1000; $i++ )
+                if( pinHash===md5("0" . $i) ) {
+                  $result = "PIN is 0$i.";
+                  $found = true;
+                  break;
+                }
+              if(!$found){
+                for( $i=1000; $i<10000; $i++ )
+                  if( pinHash===md5($i) ) {
+                    $result = "PIN is $i.";
+                    $found = true;
+                    break;
+                  }
+                if(!$found) $result = "PIN was not found.";
+              }
+            }
+          }
         }
         else # HTML form filter did not work (faulty browser?).
           $result = "Error: An invalid MD5 hash was entered.";
